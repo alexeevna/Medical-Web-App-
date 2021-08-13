@@ -33,17 +33,30 @@ public class RecordService {
         Pageable pageable = PageRequest.of(pageNumber, sizeOfPage);
 
         Page<Record> recordsPage = partOfTitle != null
-                ? recordRepository.findByParentAndTitleContainingIgnoreCase(-1L, partOfTitle, pageable)
-                : recordRepository.findByParent(-1L, pageable);
+                ? recordRepository.findByParentAndTitleContainingIgnoreCaseOrderByCreationTimeDesc(-1L, partOfTitle, pageable)
+                : recordRepository.findByParentOrderByCreationTimeDesc(-1L, pageable);
 
         return getRecordsResponse(recordsPage, pageNumber);
     }
 
-    public RecordsPageResponse getRecordsPageByTopic(Integer pageNumber, Integer sizeOfPage, Long topicId) {
+    /*public RecordsPageResponse getRecordsPageByTopic(Integer pageNumber, Integer sizeOfPage, Long topicId) {
         Pageable pageable = PageRequest.of(pageNumber, sizeOfPage);
         Topic topic = new Topic();
         topic.setId(topicId);
         Page<Record> recordsPage = recordRepository.findByTopics(topic, pageable);
+
+        return getRecordsResponse(recordsPage, pageNumber);
+    }*/
+
+    public RecordsPageResponse getRecordsPageByTopicAndTitle(Integer pageNumber, Integer sizeOfPage, String partOfTitle, Long topicId) {
+        Pageable pageable = PageRequest.of(pageNumber, sizeOfPage);
+
+        Topic topic = new Topic();
+        topic.setId(topicId);
+
+        Page<Record> recordsPage = partOfTitle != null
+                ? recordRepository.findByParentAndTopicsAndTitleContainingIgnoreCaseOrderByCreationTimeDesc(-1L, topic, partOfTitle, pageable)
+                : recordRepository.findByParentAndTopicsOrderByCreationTimeDesc(-1L, topic, pageable);
 
         return getRecordsResponse(recordsPage, pageNumber);
     }
@@ -53,7 +66,7 @@ public class RecordService {
     }
 
     public List<Record> getRecordsAnswers(Long parentId) {
-        return recordRepository.findByParent(parentId);
+        return recordRepository.findByParentOrderByCreationTimeDesc(parentId);
     }
 
     public void saveRecord(RecordCreationRequest request, Long creatorId, Long parentId) throws Exception {

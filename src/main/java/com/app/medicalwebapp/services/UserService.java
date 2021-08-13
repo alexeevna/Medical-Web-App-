@@ -9,22 +9,41 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Deprecated
 public class UserService {
 
     @Autowired
     private UserRepository userRepository;
 
     public List<User> getAll() {
-        return userRepository.findAll();
+        return userRepository.findByRoleNotLikeOrderByInitialsAsc("Модератор");
     }
 
-    public User getById(Long id) {
-        return userRepository.getOne(id);
+    public Optional<User> getOneByUsername(String username) {
+        return userRepository.findByUsernameAndRoleNotLike(username, "Модератор");
+    }
+
+    public Optional<User> getOneByUsernameAndRole(String username, String role) {
+        return userRepository.findByUsernameAndRole(username, role);
     }
 
     public Optional<User> getByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public List<User> getByInitials(String initials) {
+        return userRepository.findByInitialsContainingAndRoleNotLikeOrderByInitialsAscAllIgnoreCase(initials, "Модератор");
+    }
+
+    public List<User> getAllByRole(String role) {
+        return userRepository.findByRoleOrderByInitialsAsc(role);
+    }
+
+    public List<User> getByInitialsAndRole(String initials, String role) {
+        return userRepository.findByInitialsContainingAndRoleOrderByInitialsAscAllIgnoreCase(initials, role);
+    }
+
+    public User getById(Long id) {
+        return userRepository.getOne(id);
     }
 
     public User save(User user) {

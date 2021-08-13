@@ -18,6 +18,18 @@ public class User {
     @Column(name = "username")
     private String username;
 
+    @Column(name = "firstname")
+    private String firstname;
+
+    @Column(name = "lastname")
+    private String lastname;
+
+    @Column(name = "patronymic")
+    private String patronymic;
+
+    @Column(name = "initials")
+    private String initials;
+
     @Column(name = "password")
     private String password;
 

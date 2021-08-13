@@ -7,7 +7,7 @@ import Select from "react-select";
 import AttachmentService from "../services/attachment.service";
 import RecordService from "../services/record.service"
 
-export default class ReplyRecordForm extends Component {
+export default class ReplyRecordFormOld extends Component {
     constructor(props) {
         super(props);
         this.handleSubmitReply = this.handleSubmitReply.bind(this);
@@ -49,7 +49,6 @@ export default class ReplyRecordForm extends Component {
                         content: "",
                         selectedFiles: [],
                         selectedFilesValue: [],
-                        submittedSuccessfuly: true
                     });
                     this.props.refreshRecords();
                 },
@@ -80,7 +79,9 @@ export default class ReplyRecordForm extends Component {
                         availableFiles : filteredDicomsForSelect
                     });
                 },
-                error => { console.log(error); }
+                error => {
+                console.log(error);
+            }
             );
     }
 
